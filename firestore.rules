@@ -1,0 +1,67 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      // Allow read by any authenticated user
+      allow read: if request.auth != null;
+
+      // Allow write and delete by authenticated owner user
+      allow write, delete: if request.auth != null && request.auth.uid == userId;
+
+      match /item/{itemId} {
+        match /{document=**} {
+          // Allow the owner to read, write, and delete their own items
+          allow read, write, delete: if request.auth != null && request.auth.uid == userId;
+
+          // Allow read access if the user's ID exists in the accessibility subcollection with 'read' rights
+          allow read: if request.auth != null && exists(
+          /databases/$(database)/documents/users/$(userId)/item/$(itemId)/accessibility/$(request.auth.uid)
+          ) && 'read' in get(/databases/$(database)/documents/users/$(userId)/item/$(itemId)/accessibility/$(request.auth.uid)).data.rights;
+
+          // Allow write access if the user's ID exists in the accessibility subcollection with 'write' rights
+          allow write: if request.auth != null && exists(
+          /databases/$(database)/documents/users/$(userId)/item/$(itemId)/accessibility/$(request.auth.uid)
+          ) && 'write' in get(/databases/$(database)/documents/users/$(userId)/item/$(itemId)/accessibility/$(request.auth.uid)).data.rights;
+
+          // Allow delete access if the user's ID exists in the accessibility subcollection with 'delete' rights
+          allow delete: if request.auth != null && exists(
+          /databases/$(database)/documents/users/$(userId)/item/$(itemId)/accessibility/$(request.auth.uid)
+          ) && 'delete' in get(/databases/$(database)/documents/users/$(userId)/item/$(itemId)/accessibility/$(request.auth.uid)).data.rights;
+        }
+        match /sharedTokens/{token} {
+          // Allow read and delete by the owner
+          allow read, delete: if request.auth != null && request.auth.uid == userId;
+          // Allow creation of tokens by the owner
+          allow create: if request.auth != null && request.auth.uid == userId;
+        }
+
+        match /accessibility/{accessId} {
+          // Allow read by any authenticated user
+          allow read: if request.auth != null;
+          // Allow the owner to write and delete
+          allow write, delete: if request.auth != null && request.auth.uid == userId;
+        }
+      }
+
+      match /accessibles/{document=**} {
+        // Allow read and write by authenticated owner user
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      match /notifications/{notificationId} {
+        // Allow read, write, and delete by the authenticated owner user
+        allow read, write, delete: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // Global rules for collectionGroup queries
+    match /{path=**}/sharedTokens/{token} {
+      allow read: if request.auth != null;
+    }
+
+    match /{path=**}/accessibility/{accessId} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+  }
+}

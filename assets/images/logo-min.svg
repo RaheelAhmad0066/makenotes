@@ -1,0 +1,61 @@
+<svg version="1.0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    viewBox="0 0 340 250" color-interpolation-filters="sRGB" style="margin:auto">
+    <g fill="#343c3e" class="icon-text-wrapper icon-svg-group iconsvg">
+        <g fill="#0bbf64" class="iconsvg-imagesvg icon_container"
+            transform="translate(135.652 70.997)">
+            <path fill="none" class="image-rect" d="M0 0h68.695v68.695H0z" />
+            <svg viewBox="0 0 60 60" width="68.695" height="68.695" class="image-svg-svg bn"
+                style="overflow:visible">
+                <g mask="url(#a)">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
+                        style="overflow:visible" width="60" height="60" filter="url(#b)">
+                        <path d="M50 0h50v50c0 27.614-22.386 50-50 50S0 77.614 0 50 22.386 0 50 0z"
+                            fill-rule="evenodd" />
+                        <defs>
+                            <filter id="b">
+                                <feColorMatrix
+                                    values="0 0 0 0 0.04296875 0 0 0 0 0.74609375 0 0 0 0 0.390625 0 0 0 1 0" />
+                            </filter>
+                        </defs>
+                    </svg>
+                    <g filter="url(#c)">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.023 0.001 87.342 99.999"
+                            width="40" height="40" x="10" y="10" class="image-svg-icon">
+                            <g fill="#333">
+                                <path
+                                    d="M48.78 65.26 47 98.08l-.09 1.76a18.16 18.16 0 0 1-7.4-2.76L8.17 76.63a18.16 18.16 0 0 1-6.23-7A18 18 0 0 1 0 60.55l2-37.34a18.17 18.17 0 0 1 2.23-7.61l29 18.93-.43 7.77A21 21 0 0 0 42.28 61zm38.51-28.71s-1.53 27.82-2 37.24c-.45 1.16-3.93 4.52-8.87 8.8l1.75-44.65A12.5 12.5 0 0 0 72.62 27L35.57 2C42 .56 46.71-.25 47.91.07c7.9 5.17 31.22 20.38 31.23 20.38a18 18 0 0 1 8.15 16.1z" />
+                                <path
+                                    d="m64.05 40.66-2.11 53.87c-1.51 1.21-3 2.41-4.57 3.6a18.09 18.09 0 0 1-7.54 1.87l3-55.29a1.47 1.47 0 0 0-.67-1.32L5.83 13.13a18.26 18.26 0 0 1 6-5c1.85-.53 3.73-1 5.6-1.56l44.66 30.21a4.43 4.43 0 0 1 1.96 3.88z" />
+                                <path
+                                    d="m75.2 37.82-1.86 47.39c-2.57 2.19-5.41 4.52-8.34 6.89l2-51.32a7.41 7.41 0 0 0-3.26-6.45L21.18 5.58c3.63-1 7.2-1.87 10.48-2.65L71 29.48a9.55 9.55 0 0 1 4.2 8.34z" />
+                            </g>
+                        </svg>
+                    </g>
+                </g>
+                <mask id="a">
+                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
+                        style="overflow:visible" width="60" height="60" fill="#fff">
+                        <path d="M50 0h50v50c0 27.614-22.386 50-50 50S0 77.614 0 50 22.386 0 50 0z"
+                            fill-rule="evenodd" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-0.023 0.001 87.342 99.999"
+                        width="40" height="40" x="10" y="10" class="image-svg-icon" fill="#000">
+                        <path
+                            d="M48.78 65.26 47 98.08l-.09 1.76a18.16 18.16 0 0 1-7.4-2.76L8.17 76.63a18.16 18.16 0 0 1-6.23-7A18 18 0 0 1 0 60.55l2-37.34a18.17 18.17 0 0 1 2.23-7.61l29 18.93-.43 7.77A21 21 0 0 0 42.28 61zm38.51-28.71s-1.53 27.82-2 37.24c-.45 1.16-3.93 4.52-8.87 8.8l1.75-44.65A12.5 12.5 0 0 0 72.62 27L35.57 2C42 .56 46.71-.25 47.91.07c7.9 5.17 31.22 20.38 31.23 20.38a18 18 0 0 1 8.15 16.1z" />
+                        <path
+                            d="m64.05 40.66-2.11 53.87c-1.51 1.21-3 2.41-4.57 3.6a18.09 18.09 0 0 1-7.54 1.87l3-55.29a1.47 1.47 0 0 0-.67-1.32L5.83 13.13a18.26 18.26 0 0 1 6-5c1.85-.53 3.73-1 5.6-1.56l44.66 30.21a4.43 4.43 0 0 1 1.96 3.88z" />
+                        <path
+                            d="m75.2 37.82-1.86 47.39c-2.57 2.19-5.41 4.52-8.34 6.89l2-51.32a7.41 7.41 0 0 0-3.26-6.45L21.18 5.58c3.63-1 7.2-1.87 10.48-2.65L71 29.48a9.55 9.55 0 0 1 4.2 8.34z" />
+                    </svg>
+                </mask>
+            </svg>
+            <defs>
+                <filter id="c">
+                    <feColorMatrix
+                        values="0 0 0 0 0.04296875 0 0 0 0 0.74609375 0 0 0 0 0.390625 0 0 0 1 0"
+                        class="icon-fecolormatrix" />
+                </filter>
+            </defs>
+        </g>
+    </g>
+</svg>

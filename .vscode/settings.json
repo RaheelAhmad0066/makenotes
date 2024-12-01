@@ -1,0 +1,6 @@
+{
+  "dotnet.defaultSolution": "disable",
+  "cmake.configureOnOpen": false,
+  "dart.flutterCreateOrganization": "com.tackledinnovationltd.makernote",
+  "dart.flutterSdkPath": ".fvm/versions/stable"
+}

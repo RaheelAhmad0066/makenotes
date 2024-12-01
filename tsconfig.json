@@ -1,0 +1,4 @@
+{
+    "extends": "./cloud-functions/tsconfig.json",
+    // Other configuration options...
+}

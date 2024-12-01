@@ -1,0 +1,1334 @@
+@startuml
+set namespaceSeparator ::
+
+class "makernote::firebase_options.dart::DefaultFirebaseOptions" {
+  {static} +FirebaseOptions web
+  {static} +FirebaseOptions android
+  {static} +FirebaseOptions ios
+  {static} +FirebaseOptions macos
+  {static} +FirebaseOptions currentPlatform
+}
+
+"makernote::firebase_options.dart::DefaultFirebaseOptions" o-- "firebase_core_platform_interface::firebase_core_platform_interface.dart::FirebaseOptions"
+
+class "makernote::main.dart::MyApp" {
+  +State<MyApp> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "makernote::main.dart::MyApp"
+
+class "makernote::main.dart::_MyAppState" {
+  +StreamSubscription<User?> user
+  +void initState()
+  +void dispose()
+  +Widget build()
+}
+
+"makernote::main.dart::_MyAppState" o-- "dart::async::StreamSubscription<User>"
+"flutter::src::widgets::framework.dart::State" <|-- "makernote::main.dart::_MyAppState"
+
+class "makernote::main.dart::CustomColors" {
+  +Color? danger
+  +Color? success
+  +Color? warning
+  +Color? dimmed
+  +CustomColors copyWith()
+  +CustomColors lerp()
+  +CustomColors harmonized()
+}
+
+"makernote::main.dart::CustomColors" o-- "dart::ui::Color"
+"flutter::src::material::theme_data.dart::ThemeExtension" <|-- "makernote::main.dart::CustomColors"
+
+class "makernote::models::access_token.model.dart::AccessTokenModel" {
+  +String? id
+  +String token
+  +List<AccessRight> rights
+  +Timestamp createdAt
+  +Timestamp expiresAt
+  +AccessTokenModel copyWith()
+  +Map<String, dynamic> toFirestore()
+}
+
+"makernote::models::access_token.model.dart::AccessTokenModel" o-- "cloud_firestore_platform_interface::src::timestamp.dart::Timestamp"
+
+class "makernote::models::content_model.dart::Content" {
+  +ContentType type
+  +dynamic data
+  {static} +Content fromMap()
+  +Map<String, dynamic> toMap()
+}
+
+"makernote::models::content_model.dart::Content" o-- "makernote::models::content_model.dart::ContentType"
+
+class "makernote::models::content_model.dart::ContentType" {
+  +int index
+  {static} +List<ContentType> values
+  {static} +ContentType text
+  {static} +ContentType drawing
+  {static} +ContentType image
+}
+
+"makernote::models::content_model.dart::ContentType" o-- "makernote::models::content_model.dart::ContentType"
+"dart::core::Enum" <|-- "makernote::models::content_model.dart::ContentType"
+
+class "makernote::models::folder_model.dart::Folder" {
+  +Map<String, dynamic> toFirestore()
+  {static} +Folder fromFirestore()
+}
+
+"makernote::models::item_model.dart::Item" <|-- "makernote::models::folder_model.dart::Folder"
+
+class "makernote::models::item_model.dart::Item" {
+  +String? id
+  +String ownerId
+  +String name
+  +String type
+  +String? parentId
+  +String? previousParentId
+  +Timestamp createdAt
+  +Timestamp updatedAt
+  +bool isTrashBin
+  +Map<String, dynamic> toFirestore()
+  {static} +Item fromFirestore()
+}
+
+"makernote::models::item_model.dart::Item" o-- "cloud_firestore_platform_interface::src::timestamp.dart::Timestamp"
+
+class "makernote::models::note_accessibility.model.dart::NoteAccessibilityModel" {
+  +String? id
+  +String userId
+  +List<AccessRight> rights
+  +NoteAccessibilityModel copyWith()
+  +Map<String, dynamic> toFirestore()
+}
+
+class "makernote::models::note_mc.model.dart::NoteMCModel" {
+  +MCOption? correctAnswer
+  +NoteMCModel copyWith()
+  +Map<String, dynamic> toMap()
+}
+
+"makernote::models::note_mc.model.dart::NoteMCModel" o-- "makernote::models::note_mc.model.dart::MCOption"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "makernote::models::note_mc.model.dart::NoteMCModel"
+
+class "makernote::models::note_mc.model.dart::MCOption" {
+  +int index
+  {static} +List<MCOption> values
+  {static} +MCOption A
+  {static} +MCOption B
+  {static} +MCOption C
+  {static} +MCOption D
+}
+
+"makernote::models::note_mc.model.dart::MCOption" o-- "makernote::models::note_mc.model.dart::MCOption"
+"dart::core::Enum" <|-- "makernote::models::note_mc.model.dart::MCOption"
+
+class "makernote::models::note_model.dart::NoteModel" {
+  +String? overlayOn
+  +List<NoteMCModel>? multipleChoices
+  +Map<String, dynamic> toFirestore()
+  {static} +NoteModel fromFirestore()
+}
+
+"makernote::models::item_model.dart::Item" <|-- "makernote::models::note_model.dart::NoteModel"
+
+class "makernote::plugin::drawing_board::controllers::drawing_board.controller.dart::DrawingBoardController" {
+  +TransformationController transformationController
+  -DrawingMode _drawingMode
+  -double _penSize
+  -Color _penColor
+  -TextStyle _textStyle
+  -double _currentScale
+  -double _exponent
+  +DrawingMode drawingMode
+  +double penSize
+  +Color penColor
+  +TextStyle textStyle
+  +double currentScale
+  +double exponent
+  +void zoomIn()
+  +void zoomOut()
+  +void zoomReset()
+}
+
+"makernote::plugin::drawing_board::controllers::drawing_board.controller.dart::DrawingBoardController" o-- "flutter::src::widgets::interactive_viewer.dart::TransformationController"
+"makernote::plugin::drawing_board::controllers::drawing_board.controller.dart::DrawingBoardController" o-- "makernote::plugin::drawing_board::util::drawing_mode.dart::DrawingMode"
+"makernote::plugin::drawing_board::controllers::drawing_board.controller.dart::DrawingBoardController" o-- "dart::ui::Color"
+"makernote::plugin::drawing_board::controllers::drawing_board.controller.dart::DrawingBoardController" o-- "flutter::src::painting::text_style.dart::TextStyle"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "makernote::plugin::drawing_board::controllers::drawing_board.controller.dart::DrawingBoardController"
+
+class "makernote::plugin::drawing_board::controllers::editor.controller.dart::EditorController" {
+  +CommandDriver driver
+  +PageModel pageModel
+  +PageService pageService
+  -GraphicElementModel? _elementRef
+  -GraphicElementModel? _elementModel
+  -int? _elementIndex
+  -Debouncer? _debouncer
+  +GraphicElementModel? elementRef
+  +GraphicElementModel? elementState
+  +int? elementIndex
+  +bool hasElement
+  +void setElement()
+  +void clearElement()
+  +void updateStateToRef()
+}
+
+"makernote::plugin::drawing_board::controllers::editor.controller.dart::EditorController" o-- "makernote::plugin::drawing_board::util::commands::command_driver.dart::CommandDriver"
+"makernote::plugin::drawing_board::controllers::editor.controller.dart::EditorController" o-- "makernote::plugin::drawing_board::models::page_model.dart::PageModel"
+"makernote::plugin::drawing_board::controllers::editor.controller.dart::EditorController" o-- "makernote::plugin::drawing_board::services::page_service.dart::PageService"
+"makernote::plugin::drawing_board::controllers::editor.controller.dart::EditorController" o-- "makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementModel"
+"makernote::plugin::drawing_board::controllers::editor.controller.dart::EditorController" o-- "makernote::plugin::drawing_board::util::debouncer.dart::Debouncer"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "makernote::plugin::drawing_board::controllers::editor.controller.dart::EditorController"
+
+class "makernote::plugin::drawing_board::drawing_board.dart::DrawingBoard" {
+  +bool readOnly
+  +Widget build()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::drawing_board.dart::DrawingBoard"
+
+class "makernote::plugin::drawing_board::drawing_board.dart::_DrawingBoardRenderer" {
+  +Widget build()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::drawing_board.dart::_DrawingBoardRenderer"
+
+class "makernote::plugin::drawing_board::drawing_board.dart::_PageRenderer" {
+  +Widget build()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::drawing_board.dart::_PageRenderer"
+
+class "makernote::plugin::drawing_board::drawing_board.dart::_ScribbleElement" {
+  +ScribbleElementModel scribbleElement
+  +DrawingBoardController controller
+  +bool enabled
+  +dynamic Function(ScribbleElementModel)? onUpdated
+  +Widget build()
+}
+
+"makernote::plugin::drawing_board::drawing_board.dart::_ScribbleElement" o-- "makernote::plugin::drawing_board::models::scribble_element_model.dart::ScribbleElementModel"
+"makernote::plugin::drawing_board::drawing_board.dart::_ScribbleElement" o-- "makernote::plugin::drawing_board::controllers::drawing_board.controller.dart::DrawingBoardController"
+"makernote::plugin::drawing_board::drawing_board.dart::_ScribbleElement" o-- "null::dynamic Function(ScribbleElementModel)"
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::drawing_board.dart::_ScribbleElement"
+
+class "makernote::plugin::drawing_board::graphic_elements::base_graphic_element.dart::BaseGraphicElement" {
+  +GraphicElementModel graphicElement
+  +Widget? child
+  +Widget build()
+  -dynamic _buildGraphicElement()
+}
+
+"makernote::plugin::drawing_board::graphic_elements::base_graphic_element.dart::BaseGraphicElement" o-- "makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementModel"
+"makernote::plugin::drawing_board::graphic_elements::base_graphic_element.dart::BaseGraphicElement" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "makernote::plugin::drawing_board::graphic_elements::base_graphic_element.dart::BaseGraphicElement"
+
+class "makernote::plugin::drawing_board::graphic_elements::drawing_element.dart::DrawingElement" {
+  +DrawingElementModel drawingElement
+  +bool enabled
+  +double penSize
+  +Color penColor
+  +void Function(Sketch, DrawingElementModel)? onSketchCreated
+  +Widget build()
+}
+
+"makernote::plugin::drawing_board::graphic_elements::drawing_element.dart::DrawingElement" o-- "makernote::plugin::drawing_board::models::drawing_element_model.dart::DrawingElementModel"
+"makernote::plugin::drawing_board::graphic_elements::drawing_element.dart::DrawingElement" o-- "dart::ui::Color"
+"makernote::plugin::drawing_board::graphic_elements::drawing_element.dart::DrawingElement" o-- "null::void Function(Sketch, DrawingElementModel)"
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::graphic_elements::drawing_element.dart::DrawingElement"
+
+class "makernote::plugin::drawing_board::graphic_elements::drawing_element.dart::_DrawingPainter" {
+  +List<Sketch?> sketches
+  -void _paintSketch()
+  +void paint()
+  +bool shouldRepaint()
+}
+
+"flutter::src::rendering::custom_paint.dart::CustomPainter" <|-- "makernote::plugin::drawing_board::graphic_elements::drawing_element.dart::_DrawingPainter"
+
+class "makernote::plugin::drawing_board::graphic_elements::editable_graphic_element.dart::EditableGraphicElement" {
+  +EditableController controller
+  +Widget? child
+  +double scale
+  +double strokeWidth
+  +double controlSize
+  +void Function()? onTap
+  +Widget build()
+  -Positioned _anchorBox()
+}
+
+"makernote::plugin::drawing_board::graphic_elements::editable_graphic_element.dart::EditableGraphicElement" o-- "makernote::plugin::drawing_board::hooks::use_editable_controller.dart::EditableController"
+"makernote::plugin::drawing_board::graphic_elements::editable_graphic_element.dart::EditableGraphicElement" o-- "flutter::src::widgets::framework.dart::Widget"
+"makernote::plugin::drawing_board::graphic_elements::editable_graphic_element.dart::EditableGraphicElement" o-- "null::void Function()"
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::graphic_elements::editable_graphic_element.dart::EditableGraphicElement"
+
+class "makernote::plugin::drawing_board::graphic_elements::fullsize_graphic_element.dart::FullsizeGraphicElement" {
+  +GraphicElementModel graphicElement
+  +Widget? child
+  +Widget build()
+}
+
+"makernote::plugin::drawing_board::graphic_elements::fullsize_graphic_element.dart::FullsizeGraphicElement" o-- "makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementModel"
+"makernote::plugin::drawing_board::graphic_elements::fullsize_graphic_element.dart::FullsizeGraphicElement" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::graphic_elements::fullsize_graphic_element.dart::FullsizeGraphicElement"
+
+class "makernote::plugin::drawing_board::graphic_elements::image_element.dart::ImageElement" {
+  +ImageElementModel imageElement
+  +Widget build()
+}
+
+"makernote::plugin::drawing_board::graphic_elements::image_element.dart::ImageElement" o-- "makernote::plugin::drawing_board::models::image_element_model.dart::ImageElementModel"
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::graphic_elements::image_element.dart::ImageElement"
+
+class "makernote::plugin::drawing_board::graphic_elements::scribble_element.dart::ScribbleElement" {
+  +ScribbleElementModel scribbleElement
+  +DrawingBoardController? controller
+  +bool enabled
+  +dynamic Function(ScribbleElementModel)? onUpdated
+  +Widget build()
+}
+
+"makernote::plugin::drawing_board::graphic_elements::scribble_element.dart::ScribbleElement" o-- "makernote::plugin::drawing_board::models::scribble_element_model.dart::ScribbleElementModel"
+"makernote::plugin::drawing_board::graphic_elements::scribble_element.dart::ScribbleElement" o-- "makernote::plugin::drawing_board::hooks::use_drawing_board_controller.dart::DrawingBoardController"
+"makernote::plugin::drawing_board::graphic_elements::scribble_element.dart::ScribbleElement" o-- "null::dynamic Function(ScribbleElementModel)"
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::graphic_elements::scribble_element.dart::ScribbleElement"
+
+class "makernote::plugin::drawing_board::graphic_elements::text_field_element.dart::TextFieldElement" {
+  +EditableController? controller
+  +TextElementModel textElement
+  +Widget build()
+}
+
+"makernote::plugin::drawing_board::graphic_elements::text_field_element.dart::TextFieldElement" o-- "makernote::plugin::drawing_board::hooks::use_editable_controller.dart::EditableController"
+"makernote::plugin::drawing_board::graphic_elements::text_field_element.dart::TextFieldElement" o-- "makernote::plugin::drawing_board::models::text_element_model.dart::TextElementModel"
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::graphic_elements::text_field_element.dart::TextFieldElement"
+
+class "makernote::plugin::drawing_board::hooks::use_drawing_board_controller.dart::DrawingBoardController" {
+  +ValueNotifier<Size> canvasSize
+  +TransformationController transformationController
+  +ValueNotifier<DrawingMode> drawingMode
+  +ValueNotifier<double> penSize
+  +ValueNotifier<Color> penColor
+  +ValueNotifier<TextStyle> textStyle
+  +ValueNotifier<double> currentScale
+  +ValueNotifier<double> exponent
+  +void Function() handleZoomIn
+  +void Function() handleZoomOut
+  +void Function() handleZoomReset
+  +Map<Event, List<void Function([dynamic])>> onEvent
+  +void addListener()
+  +void removeListener()
+  +void clearListeners()
+  +void callListeners()
+}
+
+"makernote::plugin::drawing_board::hooks::use_drawing_board_controller.dart::DrawingBoardController" o-- "flutter::src::foundation::change_notifier.dart::ValueNotifier<Size>"
+"makernote::plugin::drawing_board::hooks::use_drawing_board_controller.dart::DrawingBoardController" o-- "flutter::src::widgets::interactive_viewer.dart::TransformationController"
+"makernote::plugin::drawing_board::hooks::use_drawing_board_controller.dart::DrawingBoardController" o-- "flutter::src::foundation::change_notifier.dart::ValueNotifier<DrawingMode>"
+"makernote::plugin::drawing_board::hooks::use_drawing_board_controller.dart::DrawingBoardController" o-- "flutter::src::foundation::change_notifier.dart::ValueNotifier<double>"
+"makernote::plugin::drawing_board::hooks::use_drawing_board_controller.dart::DrawingBoardController" o-- "flutter::src::foundation::change_notifier.dart::ValueNotifier<Color>"
+"makernote::plugin::drawing_board::hooks::use_drawing_board_controller.dart::DrawingBoardController" o-- "flutter::src::foundation::change_notifier.dart::ValueNotifier<TextStyle>"
+"makernote::plugin::drawing_board::hooks::use_drawing_board_controller.dart::DrawingBoardController" o-- "dart::ui::void Function()"
+
+class "makernote::plugin::drawing_board::hooks::use_drawing_board_controller.dart::Event" {
+  +int index
+  {static} +List<Event> values
+  {static} +Event undo
+  {static} +Event redo
+  {static} +Event clear
+  {static} +Event addPage
+  {static} +Event removePage
+  {static} +Event changePage
+}
+
+"makernote::plugin::drawing_board::hooks::use_drawing_board_controller.dart::Event" o-- "makernote::plugin::drawing_board::hooks::use_drawing_board_controller.dart::Event"
+"dart::core::Enum" <|-- "makernote::plugin::drawing_board::hooks::use_drawing_board_controller.dart::Event"
+
+class "makernote::plugin::drawing_board::hooks::use_editable_controller.dart::EditableController" {
+  +GlobalKey<State<StatefulWidget>> elementKey
+  +ValueNotifier<bool> isEditing
+  +ValueNotifier<Rect> bounds
+  +ValueNotifier<double> opacity
+  +ValueNotifier<bool> visibility
+  +ValueNotifier<BoxDecoration> decoration
+  +GraphicElementModel? graphicElement
+  +Null Function(GraphicElementModel?)? onEdit
+  +Rect getWidgetBoundsOnScreen()
+  -void _onBoundsChanged()
+  -void _onOpacityChanged()
+  -void _onVisibilityChanged()
+  -void _onDecorationChanged()
+  -void _registerListeners()
+  -void _unregisterListeners()
+  +void update()
+}
+
+"makernote::plugin::drawing_board::hooks::use_editable_controller.dart::EditableController" o-- "flutter::src::widgets::framework.dart::GlobalKey<State<StatefulWidget>>"
+"makernote::plugin::drawing_board::hooks::use_editable_controller.dart::EditableController" o-- "flutter::src::foundation::change_notifier.dart::ValueNotifier<bool>"
+"makernote::plugin::drawing_board::hooks::use_editable_controller.dart::EditableController" o-- "flutter::src::foundation::change_notifier.dart::ValueNotifier<Rect>"
+"makernote::plugin::drawing_board::hooks::use_editable_controller.dart::EditableController" o-- "flutter::src::foundation::change_notifier.dart::ValueNotifier<double>"
+"makernote::plugin::drawing_board::hooks::use_editable_controller.dart::EditableController" o-- "flutter::src::foundation::change_notifier.dart::ValueNotifier<BoxDecoration>"
+"makernote::plugin::drawing_board::hooks::use_editable_controller.dart::EditableController" o-- "makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementModel"
+"makernote::plugin::drawing_board::hooks::use_editable_controller.dart::EditableController" o-- "null::Null Function(GraphicElementModel)"
+
+class "makernote::plugin::drawing_board::models::drawing_element_model.dart::DrawingElementModel" {
+  +List<Sketch> sketches
+  +void updateWithElement()
+  +void updateWith()
+  +void update()
+  +DrawingElementModel copyWith()
+  +Map<String, dynamic> toMap()
+}
+
+"makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementModel" <|-- "makernote::plugin::drawing_board::models::drawing_element_model.dart::DrawingElementModel"
+
+class "makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementModel" {
+  +GraphicElementType type
+  +Rect bounds
+  +BoxDecoration decoration
+  +double opacity
+  +bool visibility
+  +void updateWithElement()
+  +void updateWith()
+  +void update()
+  +GraphicElementModel copyWith()
+  +Map<String, dynamic> toMap()
+  {static} +Widget getElementWidget()
+}
+
+"makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementModel" o-- "makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementType"
+"makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementModel" o-- "dart::ui::Rect"
+"makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementModel" o-- "flutter::src::painting::box_decoration.dart::BoxDecoration"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementModel"
+
+class "makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementType" {
+  +int index
+  {static} +List<GraphicElementType> values
+  {static} +GraphicElementType text
+  {static} +GraphicElementType rectangle
+  {static} +GraphicElementType drawing
+  {static} +GraphicElementType image
+}
+
+"makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementType" o-- "makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementType"
+"dart::core::Enum" <|-- "makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementType"
+
+class "makernote::plugin::drawing_board::models::image_element_model.dart::ImageElementModel" {
+  +String url
+  +void updateWithElement()
+  +void updateWith()
+  +void update()
+  +ImageElementModel copyWith()
+  +Map<String, dynamic> toMap()
+  +String toString()
+}
+
+"makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementModel" <|-- "makernote::plugin::drawing_board::models::image_element_model.dart::ImageElementModel"
+
+class "makernote::plugin::drawing_board::models::page_model.dart::PageModel" {
+  +String? id
+  +int order
+  +Size size
+  +List<GraphicElementModel> graphicElements
+  +ScribbleElementModel sketch
+  +String? backgroundImageUrl
+  +void updateElement()
+  +void appendElement()
+  +void insertElement()
+  +void deleteElement()
+  +void update()
+  +void updateWith()
+  +PageModel copyWith()
+  +Map<String, dynamic> toMap()
+}
+
+"makernote::plugin::drawing_board::models::page_model.dart::PageModel" o-- "dart::ui::Size"
+"makernote::plugin::drawing_board::models::page_model.dart::PageModel" o-- "makernote::plugin::drawing_board::models::scribble_element_model.dart::ScribbleElementModel"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "makernote::plugin::drawing_board::models::page_model.dart::PageModel"
+
+class "makernote::plugin::drawing_board::models::scribble_element_model.dart::ScribbleElementModel" {
+  +Sketch sketch
+  +void updateWithElement()
+  +void updateWith()
+  +void update()
+  +ScribbleElementModel copyWith()
+  +Map<String, dynamic> toMap()
+}
+
+"makernote::plugin::drawing_board::models::scribble_element_model.dart::ScribbleElementModel" o-- "scribble::src::model::sketch::sketch.dart::Sketch"
+"makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementModel" <|-- "makernote::plugin::drawing_board::models::scribble_element_model.dart::ScribbleElementModel"
+
+class "makernote::plugin::drawing_board::models::text_element_model.dart::TextElementModel" {
+  +EdgeInsetsGeometry padding
+  +String text
+  +TextStyle textStyle
+  +TextDirection textDirection
+  +Rect getNewBounds()
+  +Size getTextSize()
+  +String toString()
+  +void updateWithElement()
+  +void updateWith()
+  +void update()
+  +TextElementModel copyWith()
+  +Map<String, dynamic> toMap()
+}
+
+"makernote::plugin::drawing_board::models::text_element_model.dart::TextElementModel" o-- "flutter::src::painting::edge_insets.dart::EdgeInsetsGeometry"
+"makernote::plugin::drawing_board::models::text_element_model.dart::TextElementModel" o-- "flutter::src::painting::text_style.dart::TextStyle"
+"makernote::plugin::drawing_board::models::text_element_model.dart::TextElementModel" o-- "dart::ui::TextDirection"
+"makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementModel" <|-- "makernote::plugin::drawing_board::models::text_element_model.dart::TextElementModel"
+
+abstract class "makernote::plugin::drawing_board::services::i_note_mc_service.interface.dart::INoteMCService" {
+  +dynamic getMC()
+  +Stream<List<NoteMCModel>> getMCStream()
+  +dynamic appendMC()
+  +dynamic updateMC()
+  +dynamic deleteMC()
+}
+
+abstract class "makernote::plugin::drawing_board::services::i_note_service.interface.dart::INoteService" {
+  +dynamic getPages()
+  +Stream<List<PageModel>> getPagesStream()
+  +dynamic updatePage()
+  +dynamic insertPage()
+  +dynamic appendGraphicElement()
+  +dynamic insertGraphicElement()
+  +dynamic updateGraphicElement()
+  +dynamic batchUpdateGraphicElements()
+  +dynamic deleteGraphicElement()
+  +dynamic updatePageSketch()
+  +dynamic clearPageSketch()
+}
+
+abstract class "makernote::plugin::drawing_board::services::i_page_service.interface.dart::IPageService" {
+  +dynamic pages
+  +Stream<List<PageModel>> pagesStream
+  +PageModel? currentPage
+  +Stream<PageModel> currentPageStream
+  +void appendGraphicElement()
+  +void insertGraphicElement()
+  +void updateGraphicElement()
+  +void deleteGraphicElement()
+  +void updatePageSketch()
+}
+
+"makernote::plugin::drawing_board::services::i_page_service.interface.dart::IPageService" o-- "dart::async::Stream<List<PageModel>>"
+"makernote::plugin::drawing_board::services::i_page_service.interface.dart::IPageService" o-- "makernote::plugin::drawing_board::models::page_model.dart::PageModel"
+"makernote::plugin::drawing_board::services::i_page_service.interface.dart::IPageService" o-- "dart::async::Stream<PageModel>"
+
+class "makernote::plugin::drawing_board::services::mc_service.dart::MCService" {
+  +INoteMCService noteMCService
+  +String noteId
+  +String? ownerId
+  +dynamic getMC()
+  +Stream<List<NoteMCModel>> getMCStream()
+  +void appendMC()
+  +void updateMC()
+  +void deleteMC()
+}
+
+"makernote::plugin::drawing_board::services::mc_service.dart::MCService" o-- "makernote::plugin::drawing_board::services::i_note_mc_service.interface.dart::INoteMCService"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "makernote::plugin::drawing_board::services::mc_service.dart::MCService"
+
+class "makernote::plugin::drawing_board::services::page_service.dart::PageService" {
+  +INoteService noteService
+  +String noteId
+  +String? ownerId
+  -CacheUpdater<Map<int, GraphicElementModel>> _cachedElements
+  -CacheUpdater<ScribbleElementModel> _cachedSketches
+  -double _maxUpdateFrequency
+  -DateTime? _lastUpdate
+  -List<PageModel>? _pages
+  -int _currentPageIndex
+  +int pageCount
+  +int currentPageIndex
+  +bool hasPreviousPage
+  +bool hasNextPage
+  +bool canUpdate
+  +dynamic pages
+  +Stream<List<PageModel>> pagesStream
+  +PageModel? currentPage
+  +Stream<PageModel> currentPageStream
+  +void init()
+  +void previousPage()
+  +void nextPage()
+  +dynamic refreshPages()
+  +Stream<PageModel> getPageStream()
+  +PageModel? getPageByOrder()
+  +Stream<PageModel> getPageByOrderStream()
+  +dynamic updatePage()
+  +dynamic insertPage()
+  +dynamic appendGraphicElement()
+  +dynamic insertGraphicElement()
+  +dynamic updateGraphicElement()
+  +dynamic deleteGraphicElement()
+  +dynamic updatePageSketch()
+}
+
+"makernote::plugin::drawing_board::services::page_service.dart::PageService" o-- "makernote::plugin::drawing_board::services::i_note_service.interface.dart::INoteService"
+"makernote::plugin::drawing_board::services::page_service.dart::PageService" o-- "makernote::plugin::drawing_board::util::cache_updater.dart::CacheUpdater<Map<int, GraphicElementModel>>"
+"makernote::plugin::drawing_board::services::page_service.dart::PageService" o-- "makernote::plugin::drawing_board::util::cache_updater.dart::CacheUpdater<ScribbleElementModel>"
+"makernote::plugin::drawing_board::services::page_service.dart::PageService" o-- "dart::async::Stream<List<PageModel>>"
+"makernote::plugin::drawing_board::services::page_service.dart::PageService" o-- "makernote::plugin::drawing_board::models::page_model.dart::PageModel"
+"makernote::plugin::drawing_board::services::page_service.dart::PageService" o-- "dart::async::Stream<PageModel>"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "makernote::plugin::drawing_board::services::page_service.dart::PageService"
+"makernote::plugin::drawing_board::services::i_page_service.interface.dart::IPageService" <|-- "makernote::plugin::drawing_board::services::page_service.dart::PageService"
+
+class "makernote::plugin::drawing_board::services::upload_service.dart::UploadService" {
+  +FirebaseStorage storage
+  +String? getUserId()
+  +dynamic pickImage()
+  +Uint8List compressImage()
+  +dynamic uploadImage()
+}
+
+"makernote::plugin::drawing_board::services::upload_service.dart::UploadService" o-- "firebase_storage::firebase_storage.dart::FirebaseStorage"
+
+class "makernote::plugin::drawing_board::util::cache_updater.dart::CacheUpdater" {
+  +dynamic Function(List<TValue>) batchUpdate
+  +double maxUpdateFrequency
+  -DateTime? _lastUpdate
+  -List<TValue> _cachedItems
+  +bool canUpdate
+  +dynamic push()
+  +void clear()
+  -dynamic _batchUpdate()
+}
+
+"makernote::plugin::drawing_board::util::cache_updater.dart::CacheUpdater" o-- "null::dynamic Function(List<TValue>)"
+
+class "makernote::plugin::drawing_board::util::color_picker.dart::ColorPicker" {
+  +Color pickerColor
+  +bool withTransparent
+  +void Function(Color) onColorChanged
+  +Widget build()
+}
+
+"makernote::plugin::drawing_board::util::color_picker.dart::ColorPicker" o-- "dart::ui::Color"
+"makernote::plugin::drawing_board::util::color_picker.dart::ColorPicker" o-- "null::void Function(Color)"
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::util::color_picker.dart::ColorPicker"
+
+abstract class "makernote::plugin::drawing_board::util::commands::command.dart::Command" {
+  +dynamic execute()
+  +dynamic undo()
+}
+
+class "makernote::plugin::drawing_board::util::commands::command_driver.dart::CommandDriver" {
+  -List<Command> _commands
+  -int _currentCommandIndex
+  -List<dynamic Function()> _commandQueue
+  -bool _isProcessingQueue
+  +bool canExecute
+  +bool canUndo
+  +bool canRedo
+  +bool processingQueue
+  +double? progress
+  +List<Command> commands
+  +int currentIndex
+  +int length
+  -dynamic _processQueue()
+  +dynamic execute()
+  +dynamic undo()
+  +dynamic redo()
+}
+
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "makernote::plugin::drawing_board::util::commands::command_driver.dart::CommandDriver"
+
+class "makernote::plugin::drawing_board::util::commands::lib::create.command.dart::CreateCommand" {
+  +GraphicElementModel newElement
+  +PageService pageService
+  +PageModel pageModel
+  +dynamic execute()
+  +dynamic undo()
+  +String toString()
+}
+
+"makernote::plugin::drawing_board::util::commands::lib::create.command.dart::CreateCommand" o-- "makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementModel"
+"makernote::plugin::drawing_board::util::commands::lib::create.command.dart::CreateCommand" o-- "makernote::plugin::drawing_board::services::page_service.dart::PageService"
+"makernote::plugin::drawing_board::util::commands::lib::create.command.dart::CreateCommand" o-- "makernote::plugin::drawing_board::models::page_model.dart::PageModel"
+"makernote::plugin::drawing_board::util::commands::command.dart::Command" <|-- "makernote::plugin::drawing_board::util::commands::lib::create.command.dart::CreateCommand"
+
+class "makernote::plugin::drawing_board::util::commands::lib::delete.command.dart::DeleteCommand" {
+  +int elementIndex
+  +PageService pageService
+  +PageModel pageModel
+  -GraphicElementModel _deletedElement
+  +dynamic execute()
+  +dynamic undo()
+  +String toString()
+}
+
+"makernote::plugin::drawing_board::util::commands::lib::delete.command.dart::DeleteCommand" o-- "makernote::plugin::drawing_board::services::page_service.dart::PageService"
+"makernote::plugin::drawing_board::util::commands::lib::delete.command.dart::DeleteCommand" o-- "makernote::plugin::drawing_board::models::page_model.dart::PageModel"
+"makernote::plugin::drawing_board::util::commands::lib::delete.command.dart::DeleteCommand" o-- "makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementModel"
+"makernote::plugin::drawing_board::util::commands::command.dart::Command" <|-- "makernote::plugin::drawing_board::util::commands::lib::delete.command.dart::DeleteCommand"
+
+class "makernote::plugin::drawing_board::util::commands::lib::update.command.dart::UpdateCommand" {
+  +GraphicElementModel newElement
+  +int elementIndex
+  +PageService pageService
+  +PageModel pageModel
+  -GraphicElementModel _oldElement
+  +dynamic execute()
+  +dynamic undo()
+  +String toString()
+}
+
+"makernote::plugin::drawing_board::util::commands::lib::update.command.dart::UpdateCommand" o-- "makernote::plugin::drawing_board::models::graphic_element_model.dart::GraphicElementModel"
+"makernote::plugin::drawing_board::util::commands::lib::update.command.dart::UpdateCommand" o-- "makernote::plugin::drawing_board::services::page_service.dart::PageService"
+"makernote::plugin::drawing_board::util::commands::lib::update.command.dart::UpdateCommand" o-- "makernote::plugin::drawing_board::models::page_model.dart::PageModel"
+"makernote::plugin::drawing_board::util::commands::command.dart::Command" <|-- "makernote::plugin::drawing_board::util::commands::lib::update.command.dart::UpdateCommand"
+
+class "makernote::plugin::drawing_board::util::commands::lib::update_sketch.command.dart::UpdateSketchCommand" {
+  +PageService pageService
+  +PageModel pageModel
+  +ScribbleElementModel newSketch
+  -ScribbleElementModel _newSketch
+  -ScribbleElementModel _oldSketch
+  +dynamic execute()
+  +dynamic undo()
+}
+
+"makernote::plugin::drawing_board::util::commands::lib::update_sketch.command.dart::UpdateSketchCommand" o-- "makernote::plugin::drawing_board::services::page_service.dart::PageService"
+"makernote::plugin::drawing_board::util::commands::lib::update_sketch.command.dart::UpdateSketchCommand" o-- "makernote::plugin::drawing_board::models::page_model.dart::PageModel"
+"makernote::plugin::drawing_board::util::commands::lib::update_sketch.command.dart::UpdateSketchCommand" o-- "makernote::plugin::drawing_board::models::scribble_element_model.dart::ScribbleElementModel"
+"makernote::plugin::drawing_board::util::commands::command.dart::Command" <|-- "makernote::plugin::drawing_board::util::commands::lib::update_sketch.command.dart::UpdateSketchCommand"
+
+class "makernote::plugin::drawing_board::util::debouncer.dart::Debouncer" {
+  +int milliseconds
+  +void Function()? action
+  -Timer? _timer
+  -bool _isFirstAction
+  +dynamic run()
+}
+
+"makernote::plugin::drawing_board::util::debouncer.dart::Debouncer" o-- "dart::ui::void Function()"
+"makernote::plugin::drawing_board::util::debouncer.dart::Debouncer" o-- "dart::async::Timer"
+
+class "makernote::plugin::drawing_board::util::debuggers::command.debugger.dart::CommandDebugger" {
+  +List<Command> commands
+  +Widget build()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::util::debuggers::command.debugger.dart::CommandDebugger"
+
+class "makernote::plugin::drawing_board::util::debuggers::command_driver.debugger.dart::CommandDriverDebugger" {
+  +Widget build()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::util::debuggers::command_driver.debugger.dart::CommandDriverDebugger"
+
+class "makernote::plugin::drawing_board::util::debuggers::drawing_board.debugger.dart::DrawingBoardDebugger" {
+  +Widget build()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::util::debuggers::drawing_board.debugger.dart::DrawingBoardDebugger"
+
+class "makernote::plugin::drawing_board::util::debuggers::editor_controller.debugger.dart::EditorControllerDebugger" {
+  +Widget build()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::util::debuggers::editor_controller.debugger.dart::EditorControllerDebugger"
+
+class "makernote::plugin::drawing_board::util::debuggers::graphic_element.debugger.dart::GraphicElementDebugger" {
+  +Widget build()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::util::debuggers::graphic_element.debugger.dart::GraphicElementDebugger"
+
+class "makernote::plugin::drawing_board::util::debuggers::page_model.debugger.dart::PageModelDebugger" {
+  +Widget build()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::util::debuggers::page_model.debugger.dart::PageModelDebugger"
+
+class "makernote::plugin::drawing_board::util::drawing_mode.dart::DrawingMode" {
+  +int index
+  {static} +List<DrawingMode> values
+  {static} +DrawingMode pointer
+  {static} +DrawingMode pencil
+  {static} +DrawingMode eraser
+  {static} +DrawingMode text
+  {static} +DrawingMode image
+  {static} +DrawingMode polygon
+}
+
+"makernote::plugin::drawing_board::util::drawing_mode.dart::DrawingMode" o-- "makernote::plugin::drawing_board::util::drawing_mode.dart::DrawingMode"
+"dart::core::Enum" <|-- "makernote::plugin::drawing_board::util::drawing_mode.dart::DrawingMode"
+
+class "makernote::plugin::drawing_board::util::sketch.dart::Sketch" {
+  +List<Offset?> points
+  +double size
+  +Color color
+}
+
+"makernote::plugin::drawing_board::util::sketch.dart::Sketch" o-- "dart::ui::Color"
+
+class "makernote::plugin::drawing_board::util::widgets::editor_controls.dart::EditorControls" {
+  +Widget build()
+  +List<Widget> extraTools()
+  -Widget _buildTextTools()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::util::widgets::editor_controls.dart::EditorControls"
+
+class "makernote::plugin::drawing_board::util::widgets::editor_controls.dart::_ControlIconButton" {
+  +bool selected
+  +Icon icon
+  +void Function()? onPressed
+  +Widget build()
+}
+
+"makernote::plugin::drawing_board::util::widgets::editor_controls.dart::_ControlIconButton" o-- "flutter::src::widgets::icon.dart::Icon"
+"makernote::plugin::drawing_board::util::widgets::editor_controls.dart::_ControlIconButton" o-- "null::void Function()"
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::util::widgets::editor_controls.dart::_ControlIconButton"
+
+class "makernote::plugin::drawing_board::util::widgets::editor_controls.dart::_EditorState" {
+  +int index
+  {static} +List<_EditorState> values
+  {static} +_EditorState opacity
+  {static} +_EditorState backgroundColor
+}
+
+"makernote::plugin::drawing_board::util::widgets::editor_controls.dart::_EditorState" o-- "makernote::plugin::drawing_board::util::widgets::editor_controls.dart::_EditorState"
+"dart::core::Enum" <|-- "makernote::plugin::drawing_board::util::widgets::editor_controls.dart::_EditorState"
+
+class "makernote::plugin::drawing_board::util::widgets::element_creator.dart::EditorCreator" {
+  +void Function(GraphicElementModel)? onCreated
+  +void Function()? onCancel
+  +Widget build()
+}
+
+"makernote::plugin::drawing_board::util::widgets::element_creator.dart::EditorCreator" o-- "null::void Function(GraphicElementModel)"
+"makernote::plugin::drawing_board::util::widgets::element_creator.dart::EditorCreator" o-- "null::void Function()"
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::util::widgets::element_creator.dart::EditorCreator"
+
+class "makernote::plugin::drawing_board::util::widgets::element_editor.dart::ElementEditor" {
+  +double scale
+  +double strokeWidth
+  +double controlSize
+  +void Function(GraphicElementModel)? onEditStart
+  +void Function(GraphicElementModel)? onEditEnd
+  +Widget build()
+  -Positioned _anchorBox()
+}
+
+"makernote::plugin::drawing_board::util::widgets::element_editor.dart::ElementEditor" o-- "null::void Function(GraphicElementModel)"
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::util::widgets::element_editor.dart::ElementEditor"
+
+class "makernote::plugin::drawing_board::util::widgets::element_editor.dart::DragHandle" {
+  +int index
+  {static} +List<DragHandle> values
+  {static} +DragHandle move
+  {static} +DragHandle top
+  {static} +DragHandle bottom
+  {static} +DragHandle left
+  {static} +DragHandle right
+  {static} +DragHandle topLeft
+  {static} +DragHandle topRight
+  {static} +DragHandle bottomRight
+  {static} +DragHandle bottomLeft
+}
+
+"makernote::plugin::drawing_board::util::widgets::element_editor.dart::DragHandle" o-- "makernote::plugin::drawing_board::util::widgets::element_editor.dart::DragHandle"
+"dart::core::Enum" <|-- "makernote::plugin::drawing_board::util::widgets::element_editor.dart::DragHandle"
+
+class "makernote::plugin::drawing_board::util::widgets::icon_box.dart::IconBox" {
+  +IconData? iconData
+  +Widget? child
+  +bool disabled
+  +bool selected
+  +Size size
+  +void Function() onTap
+  +String? tooltip
+  +BorderRadiusGeometry? borderRadius
+  +Widget build()
+}
+
+"makernote::plugin::drawing_board::util::widgets::icon_box.dart::IconBox" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"makernote::plugin::drawing_board::util::widgets::icon_box.dart::IconBox" o-- "flutter::src::widgets::framework.dart::Widget"
+"makernote::plugin::drawing_board::util::widgets::icon_box.dart::IconBox" o-- "dart::ui::Size"
+"makernote::plugin::drawing_board::util::widgets::icon_box.dart::IconBox" o-- "dart::ui::void Function()"
+"makernote::plugin::drawing_board::util::widgets::icon_box.dart::IconBox" o-- "flutter::src::painting::border_radius.dart::BorderRadiusGeometry"
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::util::widgets::icon_box.dart::IconBox"
+
+class "makernote::plugin::drawing_board::util::widgets::mc_list.dart::MCList" {
+  +Widget build()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::util::widgets::mc_list.dart::MCList"
+
+class "makernote::plugin::drawing_board::util::widgets::toolbar.dart::Toolbar" {
+  +Widget build()
+  -void _showPenColorDialog()
+  -List<Widget> _buildExtraTools()
+  -List<Widget> _buildEraserTools()
+  -List<Widget> _buildPencilTools()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::util::widgets::toolbar.dart::Toolbar"
+
+class "makernote::plugin::drawing_board::util::widgets::toolbar.dart::PageSettingsDialog" {
+  +PageModel page
+  +PageService pageService
+  +Widget build()
+}
+
+"makernote::plugin::drawing_board::util::widgets::toolbar.dart::PageSettingsDialog" o-- "makernote::plugin::drawing_board::models::page_model.dart::PageModel"
+"makernote::plugin::drawing_board::util::widgets::toolbar.dart::PageSettingsDialog" o-- "makernote::plugin::drawing_board::services::page_service.dart::PageService"
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::util::widgets::toolbar.dart::PageSettingsDialog"
+
+class "makernote::plugin::drawing_board::util::widgets::zoom_controls.dart::ZoomControls" {
+  +Widget build()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::plugin::drawing_board::util::widgets::zoom_controls.dart::ZoomControls"
+
+class "makernote::screens::auth::auth_location.dart::AuthLocation" {
+  +List<String> pathPatterns
+  +List<BeamPage> buildPages()
+}
+
+"beamer::src::beam_location.dart::BeamLocation" <|-- "makernote::screens::auth::auth_location.dart::AuthLocation"
+
+class "makernote::screens::auth::auth_screen.dart::AuthScreen" {
+  +State<AuthScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "makernote::screens::auth::auth_screen.dart::AuthScreen"
+
+class "makernote::screens::auth::auth_screen.dart::_AuthScreenState" {
+  -AnimationController? _controller
+  -Animation<double>? _animatedBlur
+  +void initState()
+  +void dispose()
+  +Widget build()
+}
+
+"makernote::screens::auth::auth_screen.dart::_AuthScreenState" o-- "flutter::src::animation::animation_controller.dart::AnimationController"
+"makernote::screens::auth::auth_screen.dart::_AuthScreenState" o-- "flutter::src::animation::animation.dart::Animation<double>"
+"flutter::src::widgets::framework.dart::State" <|-- "makernote::screens::auth::auth_screen.dart::_AuthScreenState"
+"flutter::src::widgets::ticker_provider.dart::SingleTickerProviderStateMixin" <|-- "makernote::screens::auth::auth_screen.dart::_AuthScreenState"
+
+class "makernote::screens::home_location.dart::HomeLocation" {
+  +List<String> pathPatterns
+  +List<BeamPage> buildPages()
+}
+
+"beamer::src::beam_location.dart::BeamLocation" <|-- "makernote::screens::home_location.dart::HomeLocation"
+
+class "makernote::screens::home_screen.dart::HomeScreen" {
+  -BeamerDelegate _routerDelegate
+  +Widget build()
+}
+
+"makernote::screens::home_screen.dart::HomeScreen" o-- "beamer::src::beamer_delegate.dart::BeamerDelegate"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "makernote::screens::home_screen.dart::HomeScreen"
+
+class "makernote::screens::member::account::account_location.dart::AccountLocation" {
+  +List<String> pathPatterns
+  +List<BeamPage> buildPages()
+}
+
+"beamer::src::beam_location.dart::BeamLocation" <|-- "makernote::screens::member::account::account_location.dart::AccountLocation"
+
+class "makernote::screens::member::account::account_screen.dart::AccountScreen" {
+  +State<AccountScreen> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "makernote::screens::member::account::account_screen.dart::AccountScreen"
+
+class "makernote::screens::member::account::account_screen.dart::_AccountScreenState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "makernote::screens::member::account::account_screen.dart::_AccountScreenState"
+
+class "makernote::screens::member::document::document_location.dart::DocumentsLocation" {
+  +List<String> pathPatterns
+  +List<BeamPage> buildPages()
+}
+
+"beamer::src::beam_location.dart::BeamLocation" <|-- "makernote::screens::member::document::document_location.dart::DocumentsLocation"
+
+class "makernote::screens::member::document::document_screen.dart::DocumentScreen" {
+  +String? folderId
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "makernote::screens::member::document::document_screen.dart::DocumentScreen"
+
+class "makernote::screens::member::join_note::join_note_location.dart::JoinNoteLocation" {
+  +List<String> pathPatterns
+  +List<BeamPage> buildPages()
+}
+
+"beamer::src::beam_location.dart::BeamLocation" <|-- "makernote::screens::member::join_note::join_note_location.dart::JoinNoteLocation"
+
+class "makernote::screens::member::join_note::join_note_screen.dart::JoinNoteScreen" {
+  +String? token
+  +Widget build()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::screens::member::join_note::join_note_screen.dart::JoinNoteScreen"
+
+class "makernote::screens::member::member_location.dart::MemberLocation" {
+  +List<String> pathPatterns
+  +List<BeamPage> buildPages()
+}
+
+"beamer::src::beam_location.dart::BeamLocation" <|-- "makernote::screens::member::member_location.dart::MemberLocation"
+
+class "makernote::screens::member::member_screen.dart::MemberScreen" {
+  -BeamerDelegate _routerDelegate
+  +Widget build()
+}
+
+"makernote::screens::member::member_screen.dart::MemberScreen" o-- "beamer::src::beamer_delegate.dart::BeamerDelegate"
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::screens::member::member_screen.dart::MemberScreen"
+
+class "makernote::screens::member::trash::trash_location.dart::TrashLocation" {
+  +List<String> pathPatterns
+  +List<BeamPage> buildPages()
+}
+
+"beamer::src::beam_location.dart::BeamLocation" <|-- "makernote::screens::member::trash::trash_location.dart::TrashLocation"
+
+class "makernote::screens::member::trash::trash_screen.dart::TrashScreen" {
+  +String? folderId
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "makernote::screens::member::trash::trash_screen.dart::TrashScreen"
+
+class "makernote::screens::notes::note_location.dart::NoteLocation" {
+  +List<String> pathPatterns
+  +List<BeamPage> buildPages()
+}
+
+"beamer::src::beam_location.dart::BeamLocation" <|-- "makernote::screens::notes::note_location.dart::NoteLocation"
+
+class "makernote::screens::notes::note_screen.dart::NoteScreen" {
+  +String? noteId
+  +String? ownerId
+  +String? token
+  +Widget build()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::screens::notes::note_screen.dart::NoteScreen"
+
+class "makernote::screens::not_found_screen.dart::NotFoundScreen" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "makernote::screens::not_found_screen.dart::NotFoundScreen"
+
+class "makernote::services::authentication_service.dart::AuthenticationService" {
+  -FirebaseAuth _firebaseAuth
+  -User? _user
+  -bool _isLoading
+  +User? user
+  +bool isLoggedIn
+  +bool isLoading
+  +Stream<User?> userStream
+  +dynamic signOut()
+}
+
+"makernote::services::authentication_service.dart::AuthenticationService" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"makernote::services::authentication_service.dart::AuthenticationService" o-- "firebase_auth::firebase_auth.dart::User"
+"makernote::services::authentication_service.dart::AuthenticationService" o-- "dart::async::Stream<User>"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "makernote::services::authentication_service.dart::AuthenticationService"
+
+class "makernote::services::item::folder_service.dart::FolderService" {
+  +dynamic addItem()
+}
+
+"makernote::services::item::item_service.dart::ItemService" <|-- "makernote::services::item::folder_service.dart::FolderService"
+
+abstract class "makernote::services::item::item_service.dart::ItemService" {
+  {static} +String trashBinName
+  +FirebaseFirestore db
+  {static} +String collectionName
+  +String? trashBinId
+  +bool loadingTrashBinId
+  +String? getUserId()
+  +dynamic isNameExists()
+  +dynamic addItem()
+  +dynamic getParentItems()
+  +Stream<List<Item>> getItemsStream()
+  +Stream<List<Item>> getTrashedItemsStream()
+  +dynamic moveToTrash()
+  +dynamic deleteItem()
+  +dynamic moveItem()
+  +void recoverFromTrash()
+  +dynamic renameItem()
+  +dynamic ensureTrashBinExists()
+}
+
+"makernote::services::item::item_service.dart::ItemService" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+
+class "makernote::services::item::note_accessibility.service.dart::NoteAccessibilityService" {
+  {static} -int _expiryTime
+  {static} +String tokensCollectionName
+  {static} +String accessibilityCollectionName
+  +FirebaseFirestore db
+  +String? currentUserId
+  +dynamic createToken()
+  +dynamic deleteToken()
+  +dynamic validateToken()
+  +dynamic applyAccessRight()
+  +dynamic removeAccessRight()
+  +dynamic checkAccessRight()
+}
+
+"makernote::services::item::note_accessibility.service.dart::NoteAccessibilityService" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+
+class "makernote::services::item::note_service.dart::NoteService" {
+  {static} +String pagesCollectionName
+  +dynamic addItem()
+  +dynamic getNote()
+  +Stream<NoteModel> getNoteStream()
+  +dynamic createOverlayNote()
+  +dynamic getPages()
+  +Stream<List<PageModel>> getPagesStream()
+  +dynamic appendPage()
+  +dynamic insertPage()
+  +dynamic updatePage()
+  +dynamic deletePage()
+  +dynamic appendGraphicElement()
+  +dynamic insertGraphicElement()
+  +dynamic updateGraphicElement()
+  +dynamic batchUpdateGraphicElements()
+  +dynamic deleteGraphicElement()
+  +dynamic updatePageSketch()
+  +dynamic clearPageSketch()
+  +dynamic appendMC()
+  +dynamic updateMC()
+  +dynamic deleteMC()
+  +dynamic getMC()
+  +Stream<List<NoteMCModel>> getMCStream()
+}
+
+"makernote::services::item::item_service.dart::ItemService" <|-- "makernote::services::item::note_service.dart::NoteService"
+"makernote::plugin::drawing_board::services::i_note_service.interface.dart::INoteService" <|-- "makernote::services::item::note_service.dart::NoteService"
+"makernote::plugin::drawing_board::services::i_note_mc_service.interface.dart::INoteMCService" <|-- "makernote::services::item::note_service.dart::NoteService"
+
+class "makernote::utils::access_right.dart::AccessRight" {
+  +int index
+  {static} +List<AccessRight> values
+  {static} +AccessRight read
+  {static} +AccessRight write
+}
+
+"makernote::utils::access_right.dart::AccessRight" o-- "makernote::utils::access_right.dart::AccessRight"
+"dart::core::Enum" <|-- "makernote::utils::access_right.dart::AccessRight"
+
+class "makernote::utils::routes.dart::Routes" {
+  {static} +String notFound
+  {static} +String homeScreen
+  {static} +String splashScreen
+  {static} +String authScreen
+  {static} +String documentScreen
+  {static} +String noteScreen
+  {static} +String trashScreen
+  {static} +String accountScreen
+  {static} +String joinNoteScreen
+}
+
+class "makernote::utils::utils.dart::Utils" {
+  {static} -Random _random
+  {static} -String _chars
+  {static} +String createCryptoRandomString()
+  {static} +String createShortToken()
+}
+
+"makernote::utils::utils.dart::Utils" o-- "dart::math::Random"
+
+class "makernote::views::document_view.dart::DocumentView" {
+  +String? folderId
+  +State<DocumentView> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "makernote::views::document_view.dart::DocumentView"
+
+class "makernote::views::document_view.dart::_DocumentViewState" {
+  -SearchController _searchController
+  -TextEditingController _itemNameController
+  -GlobalKey<FormState> _searchFormKey
+  -GlobalKey<FormState> _createFormKey
+  +Widget build()
+}
+
+"makernote::views::document_view.dart::_DocumentViewState" o-- "flutter::src::material::search_anchor.dart::SearchController"
+"makernote::views::document_view.dart::_DocumentViewState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"makernote::views::document_view.dart::_DocumentViewState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State" <|-- "makernote::views::document_view.dart::_DocumentViewState"
+
+class "makernote::views::trash_view.dart::TrashView" {
+  +State<TrashView> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "makernote::views::trash_view.dart::TrashView"
+
+class "makernote::views::trash_view.dart::_TrashViewState" {
+  -SearchController _searchController
+  -GlobalKey<FormState> _searchFormKey
+  +Widget build()
+}
+
+"makernote::views::trash_view.dart::_TrashViewState" o-- "flutter::src::material::search_anchor.dart::SearchController"
+"makernote::views::trash_view.dart::_TrashViewState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State" <|-- "makernote::views::trash_view.dart::_TrashViewState"
+
+class "makernote::widgets::action_button.dart::ActionButton" {
+  +void Function()? onPressed
+  +Widget icon
+  +Widget build()
+}
+
+"makernote::widgets::action_button.dart::ActionButton" o-- "dart::ui::void Function()"
+"makernote::widgets::action_button.dart::ActionButton" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "makernote::widgets::action_button.dart::ActionButton"
+
+class "makernote::widgets::animated_button.dart::AnimatedButton" {
+  +String? label
+  +AnimationController controller
+  +Animation<double> largura
+  +Animation<double> altura
+  +Animation<double> radius
+  +Animation<double> opacidade
+  -Widget _buildAnimation()
+  +Widget build()
+}
+
+"makernote::widgets::animated_button.dart::AnimatedButton" o-- "flutter::src::animation::animation_controller.dart::AnimationController"
+"makernote::widgets::animated_button.dart::AnimatedButton" o-- "flutter::src::animation::animation.dart::Animation<double>"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "makernote::widgets::animated_button.dart::AnimatedButton"
+
+class "makernote::widgets::bottom_bar.dart::BottomBar" {
+  +Widget build()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::widgets::bottom_bar.dart::BottomBar"
+
+class "makernote::widgets::breadcrumb.widget.dart::BreadcrumbWidget" {
+  +String? subfixItem
+  +String? folderId
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "makernote::widgets::breadcrumb.widget.dart::BreadcrumbWidget"
+
+class "makernote::widgets::custom_input.dart::CustomInput" {
+  +String hint
+  +bool obscure
+  +Icon icon
+  +Widget build()
+}
+
+"makernote::widgets::custom_input.dart::CustomInput" o-- "flutter::src::widgets::icon.dart::Icon"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "makernote::widgets::custom_input.dart::CustomInput"
+
+class "makernote::widgets::expandable_fab.dart::ExpandableFAB" {
+  +bool? initialOpen
+  +double distance
+  +List<Widget> children
+  +Widget build()
+  -List<Widget> _buildExpandingActionButtons()
+  -Widget _buildTapToCloseFab()
+  -Widget _buildTapToOpenFab()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::widgets::expandable_fab.dart::ExpandableFAB"
+
+class "makernote::widgets::expandable_fab.dart::_ExpandingActionButton" {
+  +double directionInDegrees
+  +double maxDistance
+  +Animation<double> progress
+  +Widget child
+  +Widget build()
+}
+
+"makernote::widgets::expandable_fab.dart::_ExpandingActionButton" o-- "flutter::src::animation::animation.dart::Animation<double>"
+"makernote::widgets::expandable_fab.dart::_ExpandingActionButton" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "makernote::widgets::expandable_fab.dart::_ExpandingActionButton"
+
+class "makernote::widgets::header.dart::MyWidget" {
+  +State<MyWidget> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "makernote::widgets::header.dart::MyWidget"
+
+class "makernote::widgets::header.dart::_MyWidgetState" {
+  -AnimationController _controller
+  +void initState()
+  +void dispose()
+  +Widget build()
+}
+
+"makernote::widgets::header.dart::_MyWidgetState" o-- "flutter::src::animation::animation_controller.dart::AnimationController"
+"flutter::src::widgets::framework.dart::State" <|-- "makernote::widgets::header.dart::_MyWidgetState"
+"flutter::src::widgets::ticker_provider.dart::SingleTickerProviderStateMixin" <|-- "makernote::widgets::header.dart::_MyWidgetState"
+
+class "makernote::widgets::item.widget.dart::ItemWidget" {
+  +Item item
+  +Widget build()
+}
+
+"makernote::widgets::item.widget.dart::ItemWidget" o-- "makernote::models::item_model.dart::Item"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "makernote::widgets::item.widget.dart::ItemWidget"
+
+class "makernote::widgets::logo.dart::Logo" {
+  +bool? withText
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "makernote::widgets::logo.dart::Logo"
+
+class "makernote::widgets::main_side_menu.dart::MainSideMenu" {
+  +GlobalKey<BeamerState> beamer
+  +SideMenuController? controller
+  +String? activeUri
+  +State<MainSideMenu> createState()
+}
+
+"makernote::widgets::main_side_menu.dart::MainSideMenu" o-- "flutter::src::widgets::framework.dart::GlobalKey<BeamerState>"
+"makernote::widgets::main_side_menu.dart::MainSideMenu" o-- "flutter_side_menu::src::side_menu_controller.dart::SideMenuController"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "makernote::widgets::main_side_menu.dart::MainSideMenu"
+
+class "makernote::widgets::main_side_menu.dart::_MainSideMenuState" {
+  -List<NavItemModel> _navItems
+  -List<NavItemModel> _otherItems
+  +void logout()
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "makernote::widgets::main_side_menu.dart::_MainSideMenuState"
+
+class "makernote::widgets::main_side_menu.dart::NavItemModel" {
+  +String name
+  +IconData icon
+  +String? uri
+}
+
+"makernote::widgets::main_side_menu.dart::NavItemModel" o-- "flutter::src::widgets::icon_data.dart::IconData"
+
+class "makernote::widgets::note_sharing.widget.dart::NoteSharing" {
+  +String noteId
+  +Widget build()
+}
+
+"flutter_hooks::src::framework.dart::HookWidget" <|-- "makernote::widgets::note_sharing.widget.dart::NoteSharing"
+
+class "makernote::widgets::trashed_item.widget.dart::TrashedItemWidget" {
+  +Item item
+  +Widget build()
+}
+
+"makernote::widgets::trashed_item.widget.dart::TrashedItemWidget" o-- "makernote::models::item_model.dart::Item"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "makernote::widgets::trashed_item.widget.dart::TrashedItemWidget"
+
+
+@enduml

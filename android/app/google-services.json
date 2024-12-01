@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1083997076744",
+    "project_id": "makernote-b5e60",
+    "storage_bucket": "makernote-b5e60.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1083997076744:android:446f03d0d3b3d1abdd80bd",
+        "android_client_info": {
+          "package_name": "com.tackledinnovationltd.makernote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1083997076744-5ves3q4r3ff8id2eg94q27b0afhialec.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVqo8l3X-JMKTMhCEyc6pZMIDKe96V8m4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1083997076744-fg7djk3vmuu22beuiheunnejcosssf9r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1083997076744-3vkja53dro7qch141dmu9506723r8e70.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tackledinnovation.makernote",
+                "app_store_id": "88888888"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
